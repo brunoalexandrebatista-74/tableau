@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tableau</title>
+  <!--
+    Mini-application « Tableau » (05/11/2026).
+    Rôle unique : porter l'icône « B » et les raccourcis d'appui long sur le
+    téléphone, puis ouvrir aussitôt l'application Apps Script habituelle.
+    Ce fichier ne contient aucune donnée : seulement l'adresse de l'application,
+    qui ne s'ouvre qu'avec le compte Google de Bruno (accès « moi uniquement »).
+  -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icone_B_192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icone_B_192.png">
+  <meta name="theme-color" content="#1E3A5E">
+  <style>
+    :root { color-scheme: light; }
+    html, body { margin: 0; height: 100%; background: #FFFFFF; }
+    body {
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #1E3A5E;
+    }
+    img { width: 96px; height: 96px; }
+    p { margin: 0; font-size: 15px; color: #5A616D; }
+    a { color: #1E3A5E; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <img src="icone_B_192.png" alt="">
+  <p id="etat">Ouverture du tableau de bord…</p>
+  <p><a id="lien" href="#">Ouvrir</a></p>
+  <script>
+    // Adresse de l'application Apps Script (déploiement « moi uniquement »).
+    // Elle ne change pas tant qu'on publie par « Gérer les déploiements > Nouvelle version ».
+    var APPLI = 'https://script.google.com/macros/s/AKfycbxUqnklTFE5BKThJu9ZX7T-t2JjR_XiGJ4uF_RsPdw9STo_ShoSbNwmOwFz5vWgHZ7zTg/exec';
+
+    // Écran demandé par un raccourci (« ?vue=releve ») : un mot de lettres
+    // minuscules seulement, transmis tel quel à l'application, qui l'ignore s'il est inconnu.
+    var vue = (new URLSearchParams(location.search).get('vue') || '').toLowerCase();
+    var cible = /^[a-z]{1,20}$/.test(vue) ? APPLI + '?vue=' + vue : APPLI;
+    document.getElementById('lien').href = cible;
+
+    function partir() { location.replace(cible); }
+
+    // Petit fichier de service : Chrome en a besoin pour proposer « Installer l'application ».
+    // On l'enregistre, puis on part sans attendre plus de 0,6 seconde.
+    if ('serviceWorker' in navigator) {
+      var parti = false;
+      var go = function () { if (!parti) { parti = true; partir(); } };
+      navigator.serviceWorker.register('sw.js').then(go, go);
+      setTimeout(go, 600);
+    } else {
+      partir();
+    }
+  </script>
+</body>
+</html>

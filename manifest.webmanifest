@@ -1,0 +1,40 @@
+{
+  "name": "Tableau de bord",
+  "short_name": "Tableau",
+  "description": "Tableau de bord personnel",
+  "lang": "fr",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFFFFF",
+  "theme_color": "#1E3A5E",
+  "icons": [
+    { "src": "icone_B_192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icone_B_512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icone_B_192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icone_B_512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icone_B_mono_512.png", "sizes": "512x512", "type": "image/png", "purpose": "monochrome" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Noter un relevé",
+      "short_name": "Relevé",
+      "url": "./?vue=releve",
+      "icons": [{ "src": "icone_B_192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Noter une situation",
+      "short_name": "Situation",
+      "url": "./?vue=situation",
+      "icons": [{ "src": "icone_B_192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Agenda",
+      "short_name": "Agenda",
+      "url": "./?vue=agenda",
+      "icons": [{ "src": "icone_B_192.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ]
+}
