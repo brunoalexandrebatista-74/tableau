@@ -44,9 +44,32 @@
 
     function partir() { location.replace(cible); }
 
+    // Mode installation (« …/tableau/?installer ») : la page reste affichée pour
+    // laisser à Chrome le temps de proposer l'installation, avec un bouton si possible.
+    var installer = new URLSearchParams(location.search).has('installer');
+    if (installer) {
+      document.getElementById('etat').textContent =
+        'Pour installer : menu ⋮ de Chrome, puis « Installer l\'application » (ou « Ajouter à l\'écran d\'accueil », puis « Installer »).';
+      document.getElementById('lien').textContent = 'Ouvrir le tableau de bord sans installer';
+      if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+      window.addEventListener('beforeinstallprompt', function (ev) {
+        ev.preventDefault();
+        var b = document.createElement('button');
+        b.textContent = 'Installer « Tableau »';
+        b.style.cssText = 'font:inherit;font-size:17px;font-weight:700;padding:14px 22px;border:0;border-radius:14px;background:#1E3A5E;color:#fff';
+        b.onclick = function () { ev.prompt(); };
+        document.body.insertBefore(b, document.getElementById('etat'));
+      });
+      window.addEventListener('appinstalled', function () {
+        document.getElementById('etat').textContent = 'Installé. Vous pouvez fermer cet onglet et toucher l\'icône « Tableau ».';
+      });
+    }
+
     // Petit fichier de service : Chrome en a besoin pour proposer « Installer l'application ».
     // On l'enregistre, puis on part sans attendre plus de 0,6 seconde.
-    if ('serviceWorker' in navigator) {
+    if (installer) {
+      // rien : on reste sur la page
+    } else if ('serviceWorker' in navigator) {
       var parti = false;
       var go = function () { if (!parti) { parti = true; partir(); } };
       navigator.serviceWorker.register('sw.js').then(go, go);
